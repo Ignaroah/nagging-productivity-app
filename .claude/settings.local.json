@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm create:*)",
+      "Bash(npm run dev:*)",
+      "Bash(npm install:*)",
+      "Bash(npx tsc:*)",
+      "Bash(psql:*)",
+      "Bash(node -e \"const { Client } = require\\(''pg''\\); const fs = require\\(''fs''\\); const client = new Client\\({ connectionString: ''postgresql://postgres:zryFHlKuDDAIpQOPosIOcMPLrJSTYudH@interchange.proxy.rlwy.net:40842/railway'', ssl: { rejectUnauthorized: false } }\\); \\(async \\(\\) => { try { await client.connect\\(\\); console.log\\(''✓ Connected to database''\\); const sql = fs.readFileSync\\(''migrations/001_create_schema.sql'', ''utf8''\\); await client.query\\(sql\\); console.log\\(''✓ Migrations completed successfully''\\); await client.end\\(\\); } catch \\(err\\) { console.error\\(''Error:'', err.message\\); process.exit\\(1\\); } }\\)\\(\\);\")",
+      "Bash(node -e:*)",
+      "Bash(git init:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git config:*)"
+    ]
+  }
+}
