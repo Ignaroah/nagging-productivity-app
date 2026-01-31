@@ -22,8 +22,8 @@
 
     // Recommended Options
     "strict": false,
-    "isolatedModules": true,
-    "moduleDetection": "force",
+    "isolatedModules": false,
+    "moduleDetection": "auto",
     "skipLibCheck": true,
 
     "esModuleInterop": true,
