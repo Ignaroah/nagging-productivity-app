@@ -1,20 +1,15 @@
 {
-  // Visit https://aka.ms/tsconfig to read more about this file
+  // Backend TypeScript configuration for Node.js
   "compilerOptions": {
     // File Layout
     "rootDir": "src",
     "outDir": "dist",
 
-    // Environment Settings
-    // See also https://aka.ms/tsconfig/module
+    // Environment Settings - Node.js backend
     "module": "commonjs",
-    "target": "esnext",
-    "types": [],
+    "target": "es2020",
+    "types": ["node"],
     "lib": ["es2020"],
-    // For nodejs:
-    // "lib": ["esnext"],
-    // "types": ["node"],
-    // and npm install -D @types/node
 
     // Other Outputs
     "sourceMap": true,
@@ -22,29 +17,20 @@
     "declarationMap": true,
 
     // Stricter Typechecking Options
-    "noUncheckedIndexedAccess": true,
-    "exactOptionalPropertyTypes": true,
-
-    // Style Options
-    // "noImplicitReturns": true,
-    // "noImplicitOverride": true,
-    // "noUnusedLocals": true,
-    // "noUnusedParameters": true,
-    // "noFallthroughCasesInSwitch": true,
-    // "noPropertyAccessFromIndexSignature": true,
+    "noUncheckedIndexedAccess": false,
+    "exactOptionalPropertyTypes": false,
 
     // Recommended Options
-    "strict": true,
-    "jsx": "react-jsx",
-    "verbatimModuleSyntax": true,
+    "strict": false,
     "isolatedModules": true,
-    "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
     "skipLibCheck": true,
 
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "allowJs": true,
-    "noImplicitAny": true,
-  }
+    "noImplicitAny": true
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist", "../src", "../node_modules"]
 }

@@ -284,7 +284,7 @@ app.get('/api/schedules/active', authenticateJWT, async (req, res) => {
 app.get('/api/schedules/:id', authenticateJWT, async (req, res) => {
   try {
     const { id } = req.params;
-    const schedule = await ScheduleModel.findById(id, req.userId!);
+    const schedule = await ScheduleModel.findById(id as string, req.userId!);
 
     if (!schedule) {
       return res.status(404).json({ error: 'Schedule not found' });
@@ -333,11 +333,11 @@ app.put('/api/schedules/:id', authenticateJWT, async (req, res) => {
     const { id } = req.params;
     const updates = req.body;
 
-    const schedule = await ScheduleModel.update(id, req.userId!, updates);
+    const schedule = await ScheduleModel.update(id as string, req.userId!, updates);
 
     // If status changed to active, set as active schedule
     if (updates.status === 'active') {
-      await ScheduleModel.setActive(id, req.userId!);
+      await ScheduleModel.setActive(id as string, req.userId!);
     }
 
     res.json(schedule);
@@ -350,7 +350,7 @@ app.put('/api/schedules/:id', authenticateJWT, async (req, res) => {
 app.delete('/api/schedules/:id', authenticateJWT, async (req, res) => {
   try {
     const { id } = req.params;
-    await ScheduleModel.delete(id, req.userId!);
+    await ScheduleModel.delete(id as string, req.userId!);
     res.json({ success: true });
   } catch (error) {
     console.error('Delete schedule error:', error);
@@ -361,7 +361,7 @@ app.delete('/api/schedules/:id', authenticateJWT, async (req, res) => {
 app.put('/api/schedules/:scheduleId/chunks/:chunkId/complete', authenticateJWT, async (req, res) => {
   try {
     const { scheduleId, chunkId } = req.params;
-    const result = await ScheduleModel.markChunkComplete(scheduleId, chunkId, req.userId!);
+    const result = await ScheduleModel.markChunkComplete(scheduleId as string, chunkId as string, req.userId!);
     res.json(result);
   } catch (error) {
     console.error('Mark chunk complete error:', error);
@@ -503,7 +503,7 @@ Examples:
     });
 
     if (!response.ok) {
-      const errorData = await response.json();
+      const errorData: any = await response.json();
       console.error('Anthropic API error:', errorData);
       throw new Error(errorData.error?.message || JSON.stringify(errorData) || 'Anthropic API request failed');
     }

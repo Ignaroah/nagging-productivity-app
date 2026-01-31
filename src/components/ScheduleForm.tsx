@@ -107,6 +107,11 @@ export default function ScheduleForm({ tasks, defaultNagInterval, onScheduleCrea
     savedState?.selectedTaskIds || incompleteTasks.map(t => t.id)
   );
 
+  // Per-task settings (chunk size and nag interval)
+  const [taskSettings, setTaskSettings] = useState<Record<string, { chunkSize: number; nagInterval: number }>>(
+    savedState?.taskSettings || {}
+  );
+
   // New break form - use smart default based on schedule times
   const [newBreakTime, setNewBreakTime] = useState(getDefaultBreakTime(startTime, endTime));
   const [newBreakDuration, setNewBreakDuration] = useState(30);
@@ -122,8 +127,16 @@ export default function ScheduleForm({ tasks, defaultNagInterval, onScheduleCrea
   // Generate default schedule on mount if no saved state and tasks available
   useEffect(() => {
     if (!savedState && tasks.filter(t => t.hoursCompleted < t.estimatedHours).length > 0) {
+      const selectedTasks = tasks
+        .filter(t => t.hoursCompleted < t.estimatedHours)
+        .map(t => ({
+          ...t,
+          defaultChunkSize: getTaskChunkSize(t.id),
+          defaultNagInterval: getTaskNagInterval(t.id)
+        }));
+
       const schedule = generateSchedule({
-        tasks,
+        tasks: selectedTasks,
         startTime,
         endTime,
         breaks,
@@ -154,10 +167,11 @@ export default function ScheduleForm({ tasks, defaultNagInterval, onScheduleCrea
       previewSchedule,
       showPreview,
       viewMode,
-      selectedTaskIds
+      selectedTaskIds,
+      taskSettings
     };
     localStorage.setItem('schedule_preview_state', JSON.stringify(previewState));
-  }, [scheduleName, date, startTime, endTime, breaks, defaultChunkSize, previewChunks, previewSchedule, showPreview, viewMode]);
+  }, [scheduleName, date, startTime, endTime, breaks, defaultChunkSize, previewChunks, previewSchedule, showPreview, viewMode, selectedTaskIds, taskSettings]);
 
   const addBreak = () => {
     if (!newBreakTime) {
@@ -206,6 +220,34 @@ export default function ScheduleForm({ tasks, defaultNagInterval, onScheduleCrea
     }
   };
 
+  const getTaskChunkSize = (taskId: string) => {
+    return taskSettings[taskId]?.chunkSize ?? defaultChunkSize;
+  };
+
+  const getTaskNagInterval = (taskId: string) => {
+    return taskSettings[taskId]?.nagInterval ?? defaultNagInterval;
+  };
+
+  const updateTaskChunkSize = (taskId: string, chunkSize: number) => {
+    setTaskSettings(prev => ({
+      ...prev,
+      [taskId]: {
+        chunkSize,
+        nagInterval: prev[taskId]?.nagInterval ?? defaultNagInterval
+      }
+    }));
+  };
+
+  const updateTaskNagInterval = (taskId: string, nagInterval: number) => {
+    setTaskSettings(prev => ({
+      ...prev,
+      [taskId]: {
+        chunkSize: prev[taskId]?.chunkSize ?? defaultChunkSize,
+        nagInterval
+      }
+    }));
+  };
+
   const handleGenerate = () => {
     if (!startTime || !endTime) {
       alert('Please set start and end times');
@@ -217,8 +259,14 @@ export default function ScheduleForm({ tasks, defaultNagInterval, onScheduleCrea
       return;
     }
 
-    // Filter tasks to only include selected ones
-    const selectedTasks = tasks.filter(t => selectedTaskIds.includes(t.id));
+    // Filter tasks to only include selected ones and apply per-task settings
+    const selectedTasks = tasks
+      .filter(t => selectedTaskIds.includes(t.id))
+      .map(t => ({
+        ...t,
+        defaultChunkSize: getTaskChunkSize(t.id),
+        defaultNagInterval: getTaskNagInterval(t.id)
+      }));
 
     const schedule = generateSchedule({
       tasks: selectedTasks,
@@ -256,8 +304,14 @@ export default function ScheduleForm({ tasks, defaultNagInterval, onScheduleCrea
       return;
     }
 
-    // Generate schedule automatically
-    const selectedTasks = tasks.filter(t => selectedTaskIds.includes(t.id));
+    // Generate schedule automatically and apply per-task settings
+    const selectedTasks = tasks
+      .filter(t => selectedTaskIds.includes(t.id))
+      .map(t => ({
+        ...t,
+        defaultChunkSize: getTaskChunkSize(t.id),
+        defaultNagInterval: getTaskNagInterval(t.id)
+      }));
 
     const schedule = generateSchedule({
       tasks: selectedTasks,
@@ -275,7 +329,7 @@ export default function ScheduleForm({ tasks, defaultNagInterval, onScheduleCrea
       setPreviewSchedule(schedule);
       setShowPreview(true);
     }
-  }, [startTime, endTime, selectedTaskIds, breaks, defaultChunkSize, date, scheduleName, tasks, defaultNagInterval]);
+  }, [startTime, endTime, selectedTaskIds, breaks, defaultChunkSize, date, scheduleName, tasks, defaultNagInterval, taskSettings]);
 
   const handleSave = () => {
     if (previewChunks.length === 0) {
@@ -415,7 +469,7 @@ export default function ScheduleForm({ tasks, defaultNagInterval, onScheduleCrea
                 return (
                   <label
                     key={task.id}
-                    className={`flex items-start p-3 border rounded cursor-pointer transition-colors ${
+                    className={`flex items-start p-3 border rounded transition-colors ${
                       isSelected
                         ? 'border-blue-500 bg-blue-50'
                         : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
@@ -425,10 +479,10 @@ export default function ScheduleForm({ tasks, defaultNagInterval, onScheduleCrea
                       type="checkbox"
                       checked={isSelected}
                       onChange={() => toggleTaskSelection(task.id)}
-                      className="mt-1 mr-3"
+                      className="mt-1 mr-3 cursor-pointer"
                     />
                     <div className="flex-1">
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-2 cursor-pointer" onClick={() => toggleTaskSelection(task.id)}>
                         <span className="font-medium">{task.title}</span>
                         <span
                           className={`text-xs px-2 py-0.5 rounded ${
@@ -442,11 +496,45 @@ export default function ScheduleForm({ tasks, defaultNagInterval, onScheduleCrea
                           {task.priority}
                         </span>
                       </div>
-                      <div className="text-sm text-gray-600 mt-1">
+                      <div className="text-sm text-gray-600 mt-1 cursor-pointer" onClick={() => toggleTaskSelection(task.id)}>
                         Remaining: {remaining.toFixed(1)} {remaining === 1 ? 'hr' : 'hrs'}
                         <span className="mx-2">•</span>
                         Progress: {Math.round(progress)}%
                       </div>
+
+                      {/* Per-task settings */}
+                      {isSelected && (
+                        <div className="mt-3 pt-3 border-t border-blue-200 grid grid-cols-2 gap-2" onClick={(e) => e.stopPropagation()}>
+                          <div>
+                            <label className="block text-xs font-medium text-gray-700 mb-1">
+                              Chunk Size (min)
+                            </label>
+                            <input
+                              type="number"
+                              value={getTaskChunkSize(task.id)}
+                              onChange={(e) => updateTaskChunkSize(task.id, parseInt(e.target.value) || 0)}
+                              min="5"
+                              step="5"
+                              className="w-full border border-gray-300 rounded px-2 py-1 text-sm"
+                              onClick={(e) => e.stopPropagation()}
+                            />
+                          </div>
+                          <div>
+                            <label className="block text-xs font-medium text-gray-700 mb-1">
+                              Nag Interval (min)
+                            </label>
+                            <input
+                              type="number"
+                              value={getTaskNagInterval(task.id)}
+                              onChange={(e) => updateTaskNagInterval(task.id, parseInt(e.target.value) || 0)}
+                              min="0"
+                              step="5"
+                              className="w-full border border-gray-300 rounded px-2 py-1 text-sm"
+                              onClick={(e) => e.stopPropagation()}
+                            />
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </label>
                 );
@@ -561,32 +649,6 @@ export default function ScheduleForm({ tasks, defaultNagInterval, onScheduleCrea
                     ))}
                   </div>
                 )}
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium mb-1">Default Chunk Size (minutes)</label>
-                <input
-                  type="number"
-                  value={defaultChunkSize}
-                  onChange={(e) => setDefaultChunkSize(parseInt(e.target.value))}
-                  min="5"
-                  step="5"
-                  className="w-full border border-gray-300 rounded px-3 py-2"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium mb-1">Default Nag Interval (minutes)</label>
-                <input
-                  type="number"
-                  value={defaultNagInterval}
-                  disabled
-                  className="w-full border border-gray-300 rounded px-3 py-2 bg-gray-100 text-gray-600"
-                  title="Change in settings"
-                />
-                <p className="text-xs text-gray-500 mt-1">Set in global settings or per-task</p>
               </div>
             </div>
 
