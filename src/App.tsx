@@ -215,7 +215,7 @@ function App() {
       <header className="bg-white border-b border-gray-200 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Nagging Productivity App</h1>
+            <h1 className="text-3xl font-bold text-gray-900">Naggle</h1>
             <p className="text-sm text-gray-600 mt-1">Stay on track with scheduled task chunks and persistent reminders</p>
           </div>
           <LoginButton />

@@ -184,7 +184,7 @@ export default function NaturalLanguageScheduler({
   if (showApiKeyInput) {
     return (
       <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
-        <h3 className="text-lg font-semibold mb-2">🤖 AI Schedule Assistant Setup</h3>
+        <h3 className="text-lg font-semibold mb-2">🤖 My Nagger Setup</h3>
         <p className="text-sm text-gray-700 mb-3">
           Enter your Anthropic API key to use natural language scheduling. Get one at{' '}
           <a
@@ -227,7 +227,7 @@ export default function NaturalLanguageScheduler({
     <div className="bg-gradient-to-r from-purple-50 to-blue-50 border border-purple-200 rounded-lg p-4 mb-6">
       <div className="flex items-start justify-between mb-3">
         <div>
-          <h3 className="text-lg font-semibold">🤖 AI Schedule Assistant</h3>
+          <h3 className="text-lg font-semibold">🤖 My Nagger</h3>
           <p className="text-sm text-gray-700 mt-1">
             Describe what you want to work on in natural language
           </p>
@@ -283,7 +283,7 @@ export default function NaturalLanguageScheduler({
       {showConfirmModal && pendingActions && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 max-w-2xl w-full mx-4 max-h-[80vh] overflow-y-auto">
-            <h2 className="text-2xl font-bold mb-4">🤖 Confirm AI-Generated Plan</h2>
+            <h2 className="text-2xl font-bold mb-4">🤖 Confirm Plan from My Nagger</h2>
 
             <div className="space-y-4 mb-6">
               {/* New Tasks Section */}

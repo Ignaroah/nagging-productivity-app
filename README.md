@@ -1,13 +1,13 @@
-# Nagging Productivity App 🎯
+# Naggle 🎯
 
-A modern productivity app that helps you work on long-running tasks in smaller chunks, with configurable nagging notifications to stay on track. Features AI-powered natural language scheduling and visual timeline editing.
+A modern productivity app that helps you work on long-running tasks in smaller chunks, with configurable nagging notifications to stay on track. Features "My Nagger" - an AI-powered natural language scheduler and visual timeline editor.
 
 ## ✨ Features
 
 - **Task Management**: Create tasks with estimated hours, priorities, and progress tracking
 - **Smart Scheduling**: Auto-generate schedules based on task priority and remaining time
 - **Visual Timeline Editor**: Drag-and-drop interface to customize your schedule
-- **AI Schedule Assistant**: Use natural language to create tasks and schedules
+- **My Nagger (AI Assistant)**: Use natural language to create tasks and schedules
 - **Nagging Notifications**: Context-aware reminders to keep you on track
 - **Real-time Progress**: Visual timeline showing current time and progress
 - **Multi-device Sync**: Google OAuth login with encrypted cloud storage
@@ -93,7 +93,7 @@ See `backend/.env.example` for all required variables.
 5. **Start Working**: Activate the schedule and receive notifications
 6. **Track Progress**: Mark chunks complete as you finish them
 
-### AI Schedule Assistant
+### My Nagger (AI Assistant)
 
 Use natural language to create tasks and schedules:
 - "Create tasks for writing a blog post (2 hours) and editing photos (1 hour)"
