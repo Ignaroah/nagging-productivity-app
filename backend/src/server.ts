@@ -464,16 +464,23 @@ app.post('/api/ai/generate', async (req, res) => {
   }
 }
 
-Available existing tasks: ${tasks.map((t: any) => `- "${t.title}" (id: ${t.id}, ${t.estimatedHours * 60}min, ${t.priority})`).join('\n')}
+Available existing tasks: ${tasks.map((t: any) => `- "${t.title}" (id: ${t.id}, ${t.estimatedHours * 60}min remaining, ${t.priority} priority)`).join('\n')}
 
 Guidelines:
 - If the user mentions existing tasks by name, match them and use their ID in "useExisting"
-- If creating new tasks, set "useExisting" to false
+- If the user says "existing tasks", "my tasks", "backlog", "current tasks" WITHOUT creating new ones, include ALL existing tasks by their IDs
+- If the user mentions both new tasks AND wants existing tasks, include both (new tasks with useExisting: false, existing with their IDs)
+- If creating new tasks ONLY, set "useExisting" to false
 - Extract time ranges if mentioned (e.g., "9am to 5pm" → startTime: "09:00", endTime: "17:00")
 - Extract breaks if mentioned (e.g., "lunch at noon" → {"time": "12:00", "duration": 30})
 - If no time is specified, don't include schedule object
 - Use reasonable defaults: medium priority, 30min chunks
-- Return ONLY valid JSON, no explanations`;
+- Return ONLY valid JSON, no explanations
+
+Examples:
+- "Schedule my existing tasks from 2pm to 5pm" → Include all existing task IDs
+- "Add gardening (2hr) and schedule with my current tasks" → Create gardening + include existing task IDs
+- "Create task for cooking (1hr)" → Only create new task, no existing tasks`;
 
     // Call Anthropic API
     const response = await fetch('https://api.anthropic.com/v1/messages', {
