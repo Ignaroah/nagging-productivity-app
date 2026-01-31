@@ -224,47 +224,65 @@ export default function NaturalLanguageScheduler({
   }
 
   return (
-    <div className="bg-gradient-to-r from-purple-50 to-blue-50 border border-purple-200 rounded-lg p-4 mb-6">
-      <div className="flex items-start justify-between mb-3">
-        <div>
-          <h3 className="text-lg font-semibold">🤖 My Nagger</h3>
-          <p className="text-sm text-gray-700 mt-1">
-            Describe what you want to work on in natural language
-          </p>
-        </div>
-        <button
-          onClick={() => setShowApiKeyInput(true)}
-          className="text-sm px-3 py-1 bg-white border border-gray-300 rounded hover:bg-gray-50 text-gray-700 flex items-center gap-1"
-          title="Change API key"
-        >
-          ⚙️ Change Key
-        </button>
-      </div>
+    <div className="relative bg-[var(--dark-elevated)] border border-[var(--border-subtle)] rounded-2xl overflow-hidden mb-6">
+      <div className="absolute inset-0 bg-gradient-to-br from-[var(--neon-pink)]/10 via-transparent to-[var(--neon-cyan)]/10"></div>
+      <div className="grain-texture absolute inset-0"></div>
 
-      <div className="space-y-3">
-        <textarea
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder='Try: "Work on my report for 2 hours and do code review from 2pm to 4pm with a break at 3pm"'
-          className="w-full border border-gray-300 rounded px-3 py-2 h-20 resize-none focus:outline-none focus:ring-2 focus:ring-purple-500"
-          disabled={loading}
-        />
-
-        {error && (
-          <div className="text-sm text-red-600 bg-red-50 border border-red-200 rounded p-2">
-            {error}
+      <div className="relative p-6">
+        <div className="flex items-start justify-between mb-4">
+          <div>
+            <div className="flex items-center gap-3 mb-2">
+              <div className="relative">
+                <div className="absolute inset-0 bg-[var(--neon-pink)] blur-xl opacity-30"></div>
+                <div className="relative text-3xl">🤖</div>
+              </div>
+              <h3 className="text-2xl font-black tracking-tight text-gradient" style={{ fontFamily: "'DM Sans', sans-serif" }}>
+                MY NAGGER
+              </h3>
+            </div>
+            <p className="text-sm text-[var(--text-secondary)] font-medium">
+              Tell me what you want to accomplish, I'll handle the rest
+            </p>
           </div>
-        )}
-
-        <div className="flex gap-2">
           <button
-            onClick={handleSubmit}
-            disabled={loading || !input.trim()}
-            className="flex-1 bg-purple-500 text-white px-4 py-2 rounded hover:bg-purple-600 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+            onClick={() => setShowApiKeyInput(true)}
+            className="px-4 py-2 bg-[var(--dark-card)] border border-[var(--border-subtle)] rounded-lg hover:border-[var(--neon-pink)]/50 text-[var(--text-secondary)] hover:text-white transition-all text-sm font-medium"
+            title="Change API key"
           >
-            {loading ? 'Processing...' : 'Generate Tasks & Schedule'}
+            ⚙️ Config
           </button>
         </div>
+
+        <div className="space-y-4">
+          <div className="relative group">
+            <div className="absolute -inset-1 bg-gradient-to-r from-[var(--neon-pink)] to-[var(--neon-cyan)] rounded-xl blur opacity-0 group-focus-within:opacity-20 transition-opacity"></div>
+            <textarea
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder='Try: "Work on my existing tasks from 2pm to 6pm with a coffee break at 4pm"'
+              className="relative w-full bg-[var(--dark-card)] border border-[var(--border-subtle)] rounded-xl px-4 py-3 h-24 resize-none focus:outline-none focus:border-[var(--neon-pink)]/50 text-white placeholder-[var(--text-secondary)] transition-all font-mono text-sm"
+              disabled={loading}
+            />
+          </div>
+
+          {error && (
+            <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-3">
+              <p className="text-sm text-red-400 font-medium">{error}</p>
+            </div>
+          )}
+
+          <div className="flex gap-3">
+            <button
+              onClick={handleSubmit}
+              disabled={loading || !input.trim()}
+              className="relative flex-1 bg-gradient-to-r from-[var(--neon-pink)] to-[var(--neon-cyan)] px-6 py-3 rounded-xl font-black text-sm tracking-wider hover:shadow-[0_0_30px_rgba(255,10,120,0.5)] transition-all disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-none overflow-hidden group"
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-[var(--neon-cyan)] to-[var(--neon-pink)] opacity-0 group-hover:opacity-100 transition-opacity"></div>
+              <span className="relative z-10 text-black">
+                {loading ? '⚡ PROCESSING...' : '✨ GENERATE PLAN'}
+              </span>
+            </button>
+          </div>
 
         <div className="text-xs text-gray-600">
           <details>
