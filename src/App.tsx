@@ -190,117 +190,84 @@ function App() {
   };
 
   return (
-    <div className="min-h-screen bg-[var(--dark-bg)]">
+    <div className="min-h-screen bg-gray-50">
       {/* Migration Prompt */}
       <MigrationPrompt />
 
       {/* Completion Message */}
       {showCompletionMessage && (
-        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black/80 backdrop-blur-sm">
-          <div className="relative bg-[var(--dark-elevated)] border border-[var(--neon-pink)]/30 rounded-2xl p-8 shadow-2xl max-w-md text-center overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-[var(--neon-pink)]/10 to-[var(--neon-cyan)]/10"></div>
-            <div className="relative z-10">
-              <div className="text-7xl mb-4 animate-bounce">🎉</div>
-              <h2 className="text-3xl font-black mb-2 text-gradient">MISSION COMPLETE!</h2>
-              <p className="text-[var(--text-secondary)] mb-6 font-medium">All tasks conquered. You're unstoppable! 🚀</p>
-              <button
-                onClick={() => setShowCompletionMessage(false)}
-                className="bg-gradient-to-r from-[var(--neon-pink)] to-[var(--neon-cyan)] text-black px-8 py-3 rounded-xl font-black hover:shadow-[0_0_30px_rgba(255,10,120,0.5)] transition-all"
-              >
-                LET'S GO!
-              </button>
-            </div>
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+          <div className="bg-white rounded-lg p-8 shadow-xl max-w-md text-center">
+            <div className="text-6xl mb-4">🎉</div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">Schedule Complete!</h2>
+            <p className="text-gray-600 mb-4">Great job! All tasks in your schedule are done.</p>
+            <button
+              onClick={() => setShowCompletionMessage(false)}
+              className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600 font-medium"
+            >
+              Awesome!
+            </button>
           </div>
         </div>
       )}
 
       {/* Header */}
-      <header className="relative bg-[var(--dark-elevated)] border-b border-[var(--border-subtle)] overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-[var(--neon-pink)]/5 via-transparent to-[var(--neon-cyan)]/5"></div>
-        <div className="grain-texture absolute inset-0"></div>
-        <div className="relative max-w-7xl mx-auto px-6 py-6 flex items-center justify-between">
-          <div className="flex items-center gap-6">
-            <div className="relative">
-              <div className="absolute -inset-2 bg-gradient-to-r from-[var(--neon-pink)] to-[var(--neon-cyan)] rounded-xl blur-lg opacity-30"></div>
-              <div className="relative bg-[var(--dark-card)] p-3 rounded-xl border border-[var(--neon-pink)]/30">
-                <svg className="w-8 h-8 text-[var(--neon-pink)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-            </div>
-            <div>
-              <h1 className="text-4xl font-black tracking-tight text-gradient" style={{ fontFamily: "'DM Sans', sans-serif" }}>
-                NAGGLE
-              </h1>
-              <p className="text-sm text-[var(--text-secondary)] mt-1 font-medium">
-                Stay on track • Get nagged • Stay productive
-              </p>
-            </div>
+      <header className="bg-white border-b border-gray-200 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">Naggle</h1>
+            <p className="text-sm text-gray-600 mt-1">Stay on track with scheduled task chunks and persistent reminders</p>
           </div>
           <LoginButton />
         </div>
       </header>
 
       {/* Tab Navigation */}
-      <nav className="bg-[var(--dark-card)] border-b border-[var(--border-subtle)]">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="flex gap-2">
+      <nav className="bg-white border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex gap-1">
             <button
               onClick={() => setActiveTab('tasks')}
-              className={`relative px-6 py-4 font-bold text-sm tracking-wide transition-all duration-300 ${
+              className={`px-6 py-3 font-medium border-b-2 transition-colors ${
                 activeTab === 'tasks'
-                  ? 'text-[var(--neon-pink)]'
-                  : 'text-[var(--text-secondary)] hover:text-white'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-600 hover:text-gray-900'
               }`}
             >
-              {activeTab === 'tasks' && (
-                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-[var(--neon-pink)] to-transparent neon-glow"></div>
-              )}
-              <span className="relative z-10">📋 TASKS</span>
+              📋 Tasks
             </button>
             <button
               onClick={() => setActiveTab('schedule')}
-              className={`relative px-6 py-4 font-bold text-sm tracking-wide transition-all duration-300 ${
+              className={`px-6 py-3 font-medium border-b-2 transition-colors ${
                 activeTab === 'schedule'
-                  ? 'text-[var(--neon-cyan)]'
-                  : 'text-[var(--text-secondary)] hover:text-white'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-600 hover:text-gray-900'
               }`}
             >
-              {activeTab === 'schedule' && (
-                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-[var(--neon-cyan)] to-transparent neon-glow-cyan"></div>
-              )}
-              <span className="relative z-10">📅 CREATE</span>
+              📅 Create Schedule
             </button>
             <button
               onClick={() => setActiveTab('active')}
-              className={`relative px-6 py-4 font-bold text-sm tracking-wide transition-all duration-300 ${
+              className={`px-6 py-3 font-medium border-b-2 transition-colors relative ${
                 activeTab === 'active'
-                  ? 'text-[var(--neon-pink)]'
-                  : 'text-[var(--text-secondary)] hover:text-white'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-600 hover:text-gray-900'
               }`}
             >
-              {activeTab === 'active' && (
-                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-[var(--neon-pink)] to-transparent neon-glow"></div>
+              ▶️ Active Schedule
+              {activeSchedule && (
+                <span className="absolute top-2 right-2 w-2 h-2 bg-green-500 rounded-full"></span>
               )}
-              <span className="relative z-10 flex items-center gap-2">
-                ▶️ ACTIVE
-                {activeSchedule && (
-                  <span className="w-2 h-2 bg-[var(--neon-cyan)] rounded-full pulse-nag shadow-[0_0_10px_var(--neon-cyan)]"></span>
-                )}
-              </span>
             </button>
             <button
               onClick={() => setActiveTab('settings')}
-              className={`relative px-6 py-4 font-bold text-sm tracking-wide transition-all duration-300 ${
+              className={`px-6 py-3 font-medium border-b-2 transition-colors ${
                 activeTab === 'settings'
-                  ? 'text-[var(--neon-pink)]'
-                  : 'text-[var(--text-secondary)] hover:text-white'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-600 hover:text-gray-900'
               }`}
             >
-              {activeTab === 'settings' && (
-                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-[var(--neon-pink)] to-transparent neon-glow"></div>
-              )}
-              <span className="relative z-10">⚙️ SETTINGS</span>
+              ⚙️ Settings
             </button>
           </div>
         </div>
