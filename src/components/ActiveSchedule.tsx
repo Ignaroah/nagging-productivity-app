@@ -107,7 +107,7 @@ export default function ActiveSchedule({ schedule, onChunkComplete, onRefresh, o
       {/* Visual Timeline */}
       <div className="mb-6 bg-white border border-gray-200 rounded-lg p-6">
         <h3 className="font-bold mb-4">Timeline</h3>
-        <div className="flex gap-4">
+        <div className="flex gap-4 max-h-[600px] overflow-y-auto">
           {/* Time labels */}
           <div className="w-16 flex-shrink-0 relative" style={{ height: `${Math.max(400, (timeToMinutes(schedule.endTime) - timeToMinutes(schedule.startTime)) * (
             (timeToMinutes(schedule.endTime) - timeToMinutes(schedule.startTime)) < 30 ?
@@ -273,7 +273,7 @@ export default function ActiveSchedule({ schedule, onChunkComplete, onRefresh, o
       {/* Schedule chunks list */}
       <div className="bg-white border border-gray-200 rounded-lg p-6">
         <h3 className="font-bold mb-4">All Chunks ({schedule.chunks.length})</h3>
-        <div className="space-y-2">
+        <div className="space-y-2 max-h-[500px] overflow-y-auto">
           {schedule.chunks.map((chunk) => {
             const isCurrent = isChunkCurrent(chunk);
             const inPast = isChunkInPast(chunk);
